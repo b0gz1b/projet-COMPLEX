@@ -1,0 +1,38 @@
+set term png
+set key top left
+set yrange [0:]
+set fit quiet
+set fit logfile '/dev/null'
+f(x) = m*x*x + b
+
+set output "output/karger/matrice_adjacence/courbes/contraction_cycle.png"
+set title "Efficacité en utilisant une m d'adjacence"
+set xlabel 'Taille du graphe cycle'
+set ylabel 'Temps CPU (s)'
+fit f(x) "output/karger/matrice_adjacence/data/cycle.dat" using 1:2 via m,b
+plot "output/karger/matrice_adjacence/data/cycle.dat" using 1:2 with points title "Mesures", \
+f(x) title "Approximation"
+
+set output "output/karger/matrice_adjacence/courbes/contraction_complet.png"
+set title "Efficacité en utilisant une matrice d'adjacence"
+set xlabel 'Taille du graphe complet'
+set ylabel 'Temps CPU (s)'
+fit f(x) "output/karger/matrice_adjacence/data/cycle.dat" using 1:2 via m,b
+plot "output/karger/matrice_adjacence/data/complet.dat" using 1:2 with points title "Mesures", \
+f(x) title "Approximation"
+
+set output "output/karger/matrice_adjacence/courbes/contraction_biparti.png"
+set title "Efficacité en utilisant une matrice d'adjacence"
+set xlabel 'Taille du graphe biparti complet'
+set ylabel 'Temps CPU (s)'
+fit f(x) "output/karger/matrice_adjacence/data/cycle.dat" using 1:2 via m,b
+plot "output/karger/matrice_adjacence/data/biparti.dat" using 1:2 with points title "Mesures", \
+f(x) title "Approximation"
+
+set output "output/karger/matrice_adjacence/courbes/contraction_rand08.png"
+set title "Efficacité de l'algorithme de Karger"
+set xlabel 'Taille du graphe aléatoire (p=0,8)'
+set ylabel 'Temps CPU (s)'
+fit f(x) "output/karger/matrice_adjacence/data/cycle.dat" using 1:2 via m,b
+plot "output/karger/matrice_adjacence/data/rand08.dat" using 1:2 with points title "Mesures", \
+f(x) title "Approximation"
