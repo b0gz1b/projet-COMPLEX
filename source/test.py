@@ -9,14 +9,14 @@ from karger import *
 def main(argv):
     
     T=10
-    m = MultigrapheList(ncomplet(5))
+    m = MultigrapheList(ncomplet(10))
     print(m)
     print("karger\n")
     print(kargerIt(m,T))
     print(m.get_nb_arete())
     print(m)
     print("\n")
-    mref = Multigraphe(ncomplet(5))
+    mref = Multigraphe(ncomplet(10))
     print(mref)
     print(kargerIt(mref,T))
     print(mref.get_nb_arete())
