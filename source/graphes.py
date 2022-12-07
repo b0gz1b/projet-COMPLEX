@@ -13,12 +13,11 @@ class Multigraphe:
         return np.array2string(self.mat) + "\n" + str(self.s)
 
     def contraction(self,u,v):
-        self.mat[u,v] = 0
         self.mat[u] += self.mat[v]
-        self.mat[v] = np.zeros(len(self.mat),dtype='int32')
         self.mat[:,u] = self.mat[u]
+        self.mat[v] = np.zeros(len(self.mat),dtype='int32')
         self.mat[:,v] = self.mat[v]
-        self.mat[u,v] = 0
+        self.mat[u,u] = 0
         self.s[u].update(self.s[v]) # Nouveau nom du sommet
         self.s[v] = {}
 
