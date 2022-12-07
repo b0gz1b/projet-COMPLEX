@@ -1,5 +1,6 @@
 import numpy as np
 import itertools
+import copy
 
 # Un multigraphe sera représenté par une matrice d'adjacence 
 # dans laquelle M[i,j] sera le nombre d'arête entre ui et uj.
@@ -13,11 +14,12 @@ class Multigraphe:
         return np.array2string(self.mat) + "\n" + str(self.s)
 
     def contraction(self,u,v):
+        self.mat[u,v] = 0
         self.mat[u] += self.mat[v]
-        self.mat[:,u] = self.mat[u]
         self.mat[v] = np.zeros(len(self.mat),dtype='int32')
+        self.mat[:,u] = self.mat[u]
         self.mat[:,v] = self.mat[v]
-        self.mat[u,u] = 0
+        self.mat[u,v] = 0
         self.s[u].update(self.s[v]) # Nouveau nom du sommet
         self.s[v] = {}
 
@@ -36,6 +38,10 @@ class Multigraphe:
 
     def get_nb_arete(self):
         return np.sum(self.mat)//2
+    
+    def copy(self,G):
+        self.mat=copy.deepcopy(G.mat)
+        self.s=copy.deepcopy(G.s)
 
 class MultigrapheList:
     def __init__(self,mat):
@@ -70,7 +76,10 @@ class MultigrapheList:
     def get_nb_arete(self):
         return len(list(itertools.chain(*self.adjList.values())))//2
         
-
+    def copy(self,G):
+        self.adjList=copy.deepcopy(G.adjList)
+        self.s=copy.deepcopy(G.s)
+        
 def ncycle(n):
     return np.array([[1 if (j == i+1 or i == j+1 or (i==0 and j==n-1) or (j==0 and i==n-1)) else 0 for j in range(n)] for i in range(n)])
 

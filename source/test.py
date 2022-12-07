@@ -8,15 +8,17 @@ from karger import *
 
 def main(argv):
     
+    T=10
     m = MultigrapheList(ncomplet(5))
     print(m)
-    print(karger(m))
+    print("karger\n")
+    print(kargerIt(m,T))
     print(m.get_nb_arete())
     print(m)
     print("\n")
     mref = Multigraphe(ncomplet(5))
     print(mref)
-    print(karger(mref))
+    print(kargerIt(mref,T))
     print(mref.get_nb_arete())
     print(mref)
     # print("---Contraction 0 et 1")
