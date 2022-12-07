@@ -1,2 +1,4 @@
 # Ignore le cache python
 _pycache/
+# Ignore le batch
+*.bat 
