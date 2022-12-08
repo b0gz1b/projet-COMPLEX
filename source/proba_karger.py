@@ -6,12 +6,13 @@ from karger import *
 from graphes import *
 
 def main():
-    n=10
+    n=100
     T=20
-    it=(n*(n-1))//2
+    it=1000
 
     for i in range(2):
-        for g in range(3):
+        for g in range(1):
+            g=2
             if i==0:
                 imp = "matrice"
                 init = Multigraphe
@@ -27,6 +28,10 @@ def main():
                 name = "cycle"
                 gen = ncycle
                 cmin=2
+            elif g==2:
+                name = "bicomplet"
+                gen = nbicomplet
+                cmin=n//2-2
             else:
                 name = "biparti"
                 gen = lambda n : biparticomplet2k(n//2)
@@ -40,8 +45,7 @@ def main():
                 G = init(gen(n))
                 karger(G)
                 if G.get_nb_arete()==cmin : nbTrue+=1
-
-            print(it,"itérations ","NbTrue :",nbTrue,)
+            print(it,"itÃ©rations ","NbTrue :",nbTrue,)
         
     return 0
 

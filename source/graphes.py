@@ -4,7 +4,6 @@ import copy
 
 # Un multigraphe sera représenté par une matrice d'adjacence 
 # dans laquelle M[i,j] sera le nombre d'arête entre ui et uj.
-
 class Multigraphe:
     def __init__(self,mat):
         tMat = len(mat)
@@ -40,23 +39,31 @@ class Multigraphe:
                     i += self.mat[u,v]
 
     def rechercheExhaustive(self):
-
-        for i in range()
+        sommets = list(filter(lambda a: a != {}, self.s))
+        cmin = float('inf')
+        Cmin = {}
+        for i in range(1,len(sommets)+1):
+            for C in itertools.combinations(sommets,i):
+                cardinal_coupe = self.evaluation_coupe(C)
+                if cardinal_coupe < cmin:
+                    cmin = cardinal_coupe
+                    Cmin  = C
+        return set(list(itertools.chain(*Cmin))), cmin
                 
 
     def get_nb_arete(self):
         return np.sum(self.mat)//2
 
     def get_nb_sommet(self):
-        return len(list(filter(lambda a: a != {}, MG.s)))
+        return len(list(filter(lambda a: a != {}, self.s)))
     
     def evaluation_coupe(self,C):
         cardinal = 0
-        for i,sommet in enumerat(self.s):
+        for i,sommet in enumerate(self.s):
             if sommet == {}:
                 continue
             for c in C:
-                j = self.s.index(c)
+                j = np.where(self.s==c)[0][0]
                 cardinal += self.mat[i,j]
         return cardinal
 
@@ -98,11 +105,34 @@ class MultigrapheList:
                 return u , l[num_arete - i]
             i += len(l)
 
+    def rechercheExhaustive(self):
+        sommets = list(filter(lambda a: a != {}, self.s))
+        cmin = float('inf')
+        Cmin = {}
+        for i in range(1,len(sommets)+1):
+            for C in itertools.combinations(sommets,i):
+                cardinal_coupe = self.evaluation_coupe(C)
+                if cardinal_coupe < cmin:
+                    cmin = cardinal_coupe
+                    Cmin  = C
+        return set(list(itertools.chain(*Cmin))), cmin
+
     def get_nb_arete(self):
         return len(list(itertools.chain(*self.adjList.values())))//2
 
     def get_nb_sommet(self):
-        return len(list(filter(lambda a: a != {}, MG.s)))
+        return len(list(filter(lambda a: a != {}, self.s)))
+
+    def evaluation_coupe(self,C):
+        cardinal = 0
+        for i,sommet in enumerate(self.s):
+            if sommet == {}:
+                continue
+            for c in C:
+                for v in self.adjList[i]:
+                    if v in c:
+                        cardinal += 1
+        return cardinal
 
     def copy(self,G):
         self.adjList=copy.deepcopy(G.adjList)
@@ -122,6 +152,21 @@ def ngraphep(n,p):
     r = np.random.rand(n*n)
     return np.array([[1 if j!=i and r[j*i]<p else 0 for j in range(n)] for i in range(n)])
 
+def nbicomplet(n):
+    t=n//2
+    m=np.zeros((n,n))
+    mcomplet=ncomplet(t)
+    m[:t,:t]=mcomplet
+    m[t:,t:]=mcomplet
+    
+    u = np.random.randint(t)
+    v = np.random.randint(t,n-1)
+
+    while(u==v):  
+        v = np.random.randint(t,n-1)
+    m[u,v]=t-2
+    m[v,u]=t-2
+    return m
 
 def find_set_containing_elem(e,ls):
     for i in range(len(ls)):
