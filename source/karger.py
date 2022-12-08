@@ -2,7 +2,7 @@ import numpy as np
 import copy
 
 def karger(MG):
-    nbS=len(MG.s)
+    nbS=MG.get_nb_sommet
     while nbS > 2:
         u,v = MG.tirage_arete()
         MG.contraction(u,v)
@@ -26,3 +26,25 @@ def kargerIt(MG,T):
     MG.copy(Gopt)
 
     return sopt,mopt
+
+def contraction_partielle(MG,t):
+    nbS = MG.get_nb_sommet()
+    while nbS > t:
+        u,v = MG.tirage_arete()
+        MG.contraction(u,v)
+
+def kargerStein(MG):
+    nbS = MG.get_nb_sommet()
+    if nbS <= 6:
+        return MG.rechercheExhaustive()
+    else:
+        t = np.ceil(1+MG/np.sqrt(2))
+        MG2 = copy.deepcopy(MG)
+        contraction_partielle(MG)
+        s1,m1 = kargerStein(MG)
+        contraction_partielle(MG2)
+        s2,m2 = kargerStein(MG2)
+        if m1 < m2:
+            return s1,m1
+        else:
+            return s2,m2

@@ -39,8 +39,26 @@ class Multigraphe:
                         return u, v
                     i += self.mat[u,v]
 
+    def rechercheExhaustive(self):
+
+        for i in range()
+                
+
     def get_nb_arete(self):
         return np.sum(self.mat)//2
+
+    def get_nb_sommet(self):
+        return len(list(filter(lambda a: a != {}, MG.s)))
+    
+    def evaluation_coupe(self,C):
+        cardinal = 0
+        for i,sommet in enumerat(self.s):
+            if sommet == {}:
+                continue
+            for c in C:
+                j = self.s.index(c)
+                cardinal += self.mat[i,j]
+        return cardinal
 
     def copy(self,G):
         self.mat=copy.deepcopy(G.mat)
@@ -55,7 +73,7 @@ class MultigrapheList:
         for i in range(tMat):
             for j in range(tMat):
                 if mat[i][j] != 0:
-                    self.adjList[i].append(j)
+                    self.adjList[i] += [j] * int(mat[i][j])
         self.s = np.array([{i} for i in range(tMat)])
         self.s[isoles] = {}
         self.s[np.random.choice(np.setdiff1d(np.arange(tMat),isoles))].update(isoles)
@@ -82,6 +100,9 @@ class MultigrapheList:
 
     def get_nb_arete(self):
         return len(list(itertools.chain(*self.adjList.values())))//2
+
+    def get_nb_sommet(self):
+        return len(list(filter(lambda a: a != {}, MG.s)))
 
     def copy(self,G):
         self.adjList=copy.deepcopy(G.adjList)
