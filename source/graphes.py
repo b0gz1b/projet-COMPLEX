@@ -7,8 +7,12 @@ import copy
 
 class Multigraphe:
     def __init__(self,mat):
+        tMat = len(mat)
         self.mat = np.array(mat)
-        self.s = [{i} for i in range(len(mat))]
+        isoles = np.where(np.sum(mat,axis=1)==0)[0]
+        self.s = np.array([{i} for i in range(tMat)])
+        self.s[isoles] = {}
+        self.s[np.random.choice(np.setdiff1d(np.arange(tMat),isoles))].update(isoles)
     
     def __str__(self):
         return np.array2string(self.mat) + "\n" + str(self.s)
@@ -46,12 +50,15 @@ class Multigraphe:
 class MultigrapheList:
     def __init__(self,mat):
         tMat = len(mat)
-        self.adjList = {i:[] for i in range(tMat)}
+        isoles = np.where(np.sum(mat,axis=1)==0)[0]
+        self.adjList = {i:[] for i in range(tMat) if i not in isoles}
         for i in range(tMat):
             for j in range(tMat):
                 if mat[i][j] != 0:
                     self.adjList[i].append(j)
-        self.s = [{i} for i in range(tMat)]
+        self.s = np.array([{i} for i in range(tMat)])
+        self.s[isoles] = {}
+        self.s[np.random.choice(np.setdiff1d(np.arange(tMat),isoles))].update(isoles)
     def __str__(self):
         return str(self.adjList)+"\n"+str(self.s)
 
