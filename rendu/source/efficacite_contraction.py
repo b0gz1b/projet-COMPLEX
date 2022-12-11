@@ -27,37 +27,26 @@ def main(argv):
         name = "biparti"
         gen = lambda n : biparticomplet2k(n//2)
     else:
-        name = "rand05"
-        gen = lambda n : ngraphep(n,0.5 if len(argv) < 3 else int(argv[2]))
+        name = "rand08"
+        gen = lambda n : ngraphep(n,0.8 if len(argv) < 3 else int(argv[2]))
 
-    print("Mesure de karger sur",name,"avec",imp)
+    print("Mesure de contraction sur",name,"avec",imp)
 
-    filename = "output/karger/"+imp+"_adjacence/data/"+name+"_"+str(uuid.uuid4())+".dat"
-    filename2 = "output/karger/"+'liste'+"_adjacence/data/"+name+"_"+str(uuid.uuid4())+".dat"
-    for n in range(100,1001,50):
+    filename = "output/contraction/"+imp+"_adjacence/data/"+name+"_"+str(uuid.uuid4())+".dat"
+    for n in range(1000,10001,500):
         f = open(filename, "a")
-        f2 = open(filename2, "a")
         mesures = []
-        mesures2 = []
-        for a in range(5):
-            m = gen(n)
-            G = init(m)
-            G2 = MultigrapheList(m)
+        save = init(gen(n))
+        for a in range(50):
+            G = copy.deepcopy(save)
+            u,v = G.tirage_arete()
             start = time.time()
-            karger(G)
+            G.contraction(u,v)
             end = time.time()
             mesures.append(end-start)
-            start = time.time()
-            karger(G2)
-            end = time.time()
-            mesures2.append(end-start)
-
         print("Taille :",n,"Temps :",np.mean(mesures))
-        print("Taille :",n,"Temps :",np.mean(mesures2))
         f.write(str(n)+" "+str(np.mean(mesures))+'\n')
-        f2.write(str(n)+" "+str(np.mean(mesures2))+'\n')
         f.close()
-        f2.close()
     return 0
 
 
